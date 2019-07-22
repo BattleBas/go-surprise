@@ -1,33 +1,45 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"io/ioutil"
+	"log"
+	"net/http"
 
-	"gopkg.in/yaml.v2"
+	"github.com/gorilla/mux"
 )
 
-func main() {
-
-	dat, err := ioutil.ReadFile("people-test.yml")
+// Register parses a group of people and sorts them
+// making each of them a giver and assigining them a reciever
+func Register(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	givers := Group{}
-	err = yaml.Unmarshal(dat, &givers)
+	err = json.Unmarshal(body, &givers)
 	if err != nil {
 		panic(err)
 	}
 
 	recievers := Group{}
-	err = yaml.Unmarshal(dat, &recievers)
+	err = json.Unmarshal(body, &recievers)
 	if err != nil {
 		panic(err)
 	}
 
 	matches, err := CreateMatches(givers, recievers)
+	response, err := json.Marshal(matches)
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Printf("%+v", matches)
+	w.Write(response)
+}
 
+func main() {
+	r := mux.NewRouter()
+	r.HandleFunc("/register", Register).Methods("POST")
+	log.Fatal(http.ListenAndServe(":8081", r))
 }

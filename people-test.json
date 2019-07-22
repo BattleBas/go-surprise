@@ -1,0 +1,46 @@
+{
+    "people": [
+        {
+            "name": "Frodo",
+            "email": "frodo@example.com",
+            "invalid": [
+                "Bilbo"
+            ]
+        },
+        {
+            "name": "Bilbo",
+            "email": "Bilbo@example.com",
+            "invalid": [
+                "Frodo"
+            ]
+        },
+        {
+            "name": "Legolas",
+            "email": "legolas@example.com",
+            "invalid": [
+                "Gimli"
+            ]
+        },
+        {
+            "name": "Gimli",
+            "email": "gimli@gmail.com",
+            "invalid": [
+                "Legolas"
+            ]
+        },
+        {
+            "name": "Aragorn",
+            "email": "Aragorn@example.com",
+            "invalid": [
+                "Arwen"
+            ]
+        },
+        {
+            "name": "Arwen",
+            "email": "Arwen@gmail.com",
+            "invalid": [
+                "Aragorn"
+            ]
+        }
+    ]
+}

@@ -34,7 +34,7 @@ func (p Person) isInvalid(name string) bool {
 
 // Matches represents a slice of matched participants
 type Matches struct {
-	pairs []Pair
+	Pairs []Pair
 }
 
 // Pair represents a giver and a reciever that have been matched together
@@ -56,7 +56,7 @@ func CreateMatches(g Group, r Group) (Matches, error) {
 
 	matches := Matches{}
 	for i := 0; i < len(g.People); i++ {
-		matches.pairs = append(matches.pairs, Pair{Giver: g.People[i], Reciever: r.People[i]})
+		matches.Pairs = append(matches.Pairs, Pair{Giver: g.People[i], Reciever: r.People[i]})
 	}
 
 	for {
@@ -77,7 +77,7 @@ func CreateMatches(g Group, r Group) (Matches, error) {
 // validateMatches iterates over possible matches to see if every giver has been assigned a valid reciever
 func validateMatches(m Matches) (bool, int) {
 
-	for i, pair := range m.pairs {
+	for i, pair := range m.Pairs {
 		if pair.Giver.isInvalid(pair.Reciever.Name) {
 			return false, i
 		}
@@ -89,8 +89,8 @@ func validateMatches(m Matches) (bool, int) {
 // swapMatch looks for another person to swap recievers with to create two valid matches
 func swapMatch(m *Matches, swapIndex int) error {
 
-	swap := m.pairs[swapIndex]
-	for i, pair := range m.pairs {
+	swap := m.Pairs[swapIndex]
+	for i, pair := range m.Pairs {
 		if i == swapIndex {
 			continue
 		}
@@ -100,8 +100,8 @@ func swapMatch(m *Matches, swapIndex int) error {
 		}
 
 		tmp := swap.Reciever
-		m.pairs[swapIndex].Reciever = pair.Reciever
-		m.pairs[i].Reciever = tmp
+		m.Pairs[swapIndex].Reciever = pair.Reciever
+		m.Pairs[i].Reciever = tmp
 		return nil
 	}
 
