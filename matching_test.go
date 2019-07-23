@@ -73,8 +73,8 @@ func TestCreateMatches(t *testing.T) {
 			}
 
 			// CreateMatches shuffles the test.givers slice
-			sort.Slice(matches.pairs, func(i, j int) bool {
-				return matches.pairs[i].Giver.Name < matches.pairs[j].Giver.Name
+			sort.Slice(matches.Pairs, func(i, j int) bool {
+				return matches.Pairs[i].Giver.Name < matches.Pairs[j].Giver.Name
 			})
 			if !reflect.DeepEqual(test.matches, matches) {
 				t.Fatalf("wrong matches")
