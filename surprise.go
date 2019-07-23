@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -41,5 +42,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/register", Register).Methods("POST")
-	log.Fatal(http.ListenAndServe(":8081", r))
+	port := os.Getenv("PORT")
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
