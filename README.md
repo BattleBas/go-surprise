@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/BattleBas/go-surprise.svg?branch=master)](https://travis-ci.com/BattleBas/go-surprise)
+
 <img src="https://raw.githubusercontent.com/battlebas/go-surprise/master/surprise_logo.png" width="256">
 
 # go-surprise
