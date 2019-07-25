@@ -17,33 +17,43 @@ func TestCreateMatches(t *testing.T) {
 	}{
 		{"no-valid-pairs",
 			Group{
-				Person{Name: "Bob"},
-				Person{Name: "Bob"},
+				[]Person{
+					Person{Name: "Bob"},
+					Person{Name: "Bob"},
+				},
 			},
 			Group{
-				Person{Name: "Bob"},
-				Person{Name: "Bob"},
+				[]Person{
+					Person{Name: "Bob"},
+					Person{Name: "Bob"},
+				},
 			},
 			Matches{},
 			true,
 		},
 		{"valid-pairs",
 			Group{
-				Person{Name: "Bob"},
-				Person{Name: "Eric"},
+				[]Person{
+					Person{Name: "Bob"},
+					Person{Name: "Eric"},
+				},
 			},
 			Group{
-				Person{Name: "Bob"},
-				Person{Name: "Eric"},
+				[]Person{
+					Person{Name: "Bob"},
+					Person{Name: "Eric"},
+				},
 			},
 			Matches{
-				Pair{
-					Giver:    Person{Name: "Bob"},
-					Reciever: Person{Name: "Eric"},
-				},
-				Pair{
-					Giver:    Person{Name: "Eric"},
-					Reciever: Person{Name: "Bob"},
+				[]Pair{
+					Pair{
+						Giver:    Person{Name: "Bob"},
+						Reciever: Person{Name: "Eric"},
+					},
+					Pair{
+						Giver:    Person{Name: "Eric"},
+						Reciever: Person{Name: "Bob"},
+					},
 				},
 			},
 			false,
@@ -63,8 +73,8 @@ func TestCreateMatches(t *testing.T) {
 			}
 
 			// CreateMatches shuffles the test.givers slice
-			sort.Slice(matches, func(i, j int) bool {
-				return matches[i].Giver.Name < matches[j].Giver.Name
+			sort.Slice(matches.Pairs, func(i, j int) bool {
+				return matches.Pairs[i].Giver.Name < matches.Pairs[j].Giver.Name
 			})
 			if !reflect.DeepEqual(test.matches, matches) {
 				t.Fatalf("wrong matches")
