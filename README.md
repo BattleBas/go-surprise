@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/BattleBas/go-surprise.svg?branch=master)](https://travis-ci.com/BattleBas/go-surprise)
 
-<img src="https://raw.githubusercontent.com/battlebas/go-surprise/master/assets/surprise_logo.png" width="256">
+<img src="https://raw.githubusercontent.com/BattleBas/go-surprise/master/assets/surprise_logo.png" width="256">
 
 # go-surprise
 The goal of this project is the provide a backend application that will help

@@ -1,4 +1,4 @@
-module github.com/battlebas/go-surprise
+module github.com/BattleBas/go-surprise
 
 go 1.12
 

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/battlebas/go-surprise/pkg/restapi"
+	"github.com/BattleBas/go-surprise/pkg/restapi"
 )
 
 func main() {

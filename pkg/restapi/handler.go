@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/battlebas/go-surprise/pkg/matching"
+	"github.com/BattleBas/go-surprise/pkg/matching"
 	"github.com/gorilla/mux"
 )
 
