@@ -13,6 +13,7 @@ type Group struct {
 
 // Person represents an individual participating in Surprise
 type Person struct {
+	ID      int
 	Name    string
 	Email   string
 	Invalid []string
