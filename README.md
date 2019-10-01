@@ -25,6 +25,6 @@ Run the unit tests with `go test`
 
 To locally test the application
 1. `docker build -t surprise .`
-2. `docker run --rm -p 8080:8081 --env-file local-env.list surprise` (Note: update "\<password\>" with the one you set when setting up PostGres)
+2. `docker run --rm -p 8080:8081 --env-file .env surprise` (Note: update "\<password\>" with the one you set when setting up PostGres)
 3. Open [Postman](https://www.getpostman.com/)
 4. You can now send requests to the server
