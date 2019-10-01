@@ -8,4 +8,4 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o surprise cmd/surprise-
 FROM scratch
 COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=build-env /src/surprise /
-CMD ["/surprise"]
+CMD ["./surprise"]
