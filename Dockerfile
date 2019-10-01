@@ -5,8 +5,7 @@ WORKDIR /src
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o surprise cmd/surprise-server/main.go
 
-FROM scratch
+FROM alpine
 COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-WORKDIR /app
-COPY --from=build-env /src/surprise .
-CMD ["./surprise"]
+COPY --from=build-env /src/surprise /
+CMD ["/surprise"]
