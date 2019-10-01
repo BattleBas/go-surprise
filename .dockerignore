@@ -1,5 +1,9 @@
 .git
-README.md
-*.png
+.vscode
 .travis.yml
+.env
 assets/
+
+people-test.json
+README.md
+*.exe

@@ -1,10 +1,11 @@
-FROM golang:1.12 AS build-env
+FROM golang:1.12-alpine AS build-env
+RUN apk --no-cache add ca-certificates && \
+    apk add git
 WORKDIR /src
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o surprise cmd/surprise-server/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o surprise cmd/surprise-server/main.go
 
-FROM alpine
-RUN apk --no-cache add ca-certificates
-WORKDIR /app
-COPY --from=build-env /src/surprise .
-CMD ["./surprise"]
+FROM scratch
+COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=build-env /src/surprise /
+ENTRYPOINT ["/surprise"]
