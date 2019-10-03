@@ -71,10 +71,29 @@ func (db *DB) CreateMatchesTable() error {
 	return nil
 }
 
+func (db *DB) deleteMatches() error {
+	qry := `DELETE FROM matches`
+	_, err := db.Exec(qry)
+	return err
+}
+
+func (db *DB) deletePeople() error {
+	qry := `ALTER SEQUENCE people_id_seq RESTART WITH 1`
+	if _, err := db.Exec(qry); err != nil {
+		return err
+	}
+
+	qry = `DELETE FROM people`
+	_, err := db.Exec(qry)
+	return err
+}
+
 // SavePeople does a bulk import to save all the people into the database
 func (db *DB) SavePeople(g *matching.Group) error {
-	qry := `DELETE FROM people`
-	if _, err := db.Exec(qry); err != nil {
+	if err := db.deleteMatches(); err != nil {
+		return err
+	}
+	if err := db.deletePeople(); err != nil {
 		return err
 	}
 
@@ -135,8 +154,7 @@ func (db *DB) GetPeople() (matching.Group, error) {
 
 // SaveMatches does a bulk import to save all the matches into the database
 func (db *DB) SaveMatches(m *matching.Matches) error {
-	qry := `DELETE FROM matches`
-	if _, err := db.Exec(qry); err != nil {
+	if err := db.deleteMatches(); err != nil {
 		return err
 	}
 
