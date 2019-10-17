@@ -2,9 +2,9 @@ package storage
 
 import (
 	"database/sql"
-	"fmt"
 	"os"
 
+	"github.com/BattleBas/go-surprise/pkg/email"
 	"github.com/BattleBas/go-surprise/pkg/matching"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
@@ -17,6 +17,7 @@ type Database interface {
 	SavePeople(*matching.Group) error
 	GetPeople() (matching.Group, error)
 	SaveMatches(*matching.Matches) error
+	GetMatched() ([]email.Match, error)
 }
 
 // DB stores the open database connection handle
@@ -41,8 +42,7 @@ func (db *DB) CreatePeopleTable() error {
 
 	qry := `
 	CREATE TABLE IF NOT EXISTS people (
-		id SERIAL PRIMARY KEY,
-		name VARCHAR (50) NOT NULL,
+		name VARCHAR (50) NOT NULL PRIMARY KEY,
 		email VARCHAR (350) NOT NULL,
 		invalid TEXT[]
 	)`
@@ -59,8 +59,7 @@ func (db *DB) CreateMatchesTable() error {
 
 	qry := `
 	CREATE TABLE IF NOT EXISTS matches (
-		id INTEGER PRIMARY KEY,
-		giver VARCHAR (50) NOT NULL,
+		giver VARCHAR (50) NOT NULL PRIMARY KEY,
 		reciever VARCHAR (50) NOT NULL
 	)`
 
@@ -78,12 +77,7 @@ func (db *DB) deleteMatches() error {
 }
 
 func (db *DB) deletePeople() error {
-	qry := `ALTER SEQUENCE people_id_seq RESTART WITH 1`
-	if _, err := db.Exec(qry); err != nil {
-		return err
-	}
-
-	qry = `DELETE FROM people`
+	qry := `DELETE FROM people`
 	_, err := db.Exec(qry)
 	return err
 }
@@ -141,15 +135,37 @@ func (db *DB) GetPeople() (matching.Group, error) {
 	var group matching.Group
 	for rows.Next() {
 		var p matching.Person
-		err = rows.Scan(&p.ID, &p.Name, &p.Email, pq.Array(&p.Invalid))
+		err = rows.Scan(&p.Name, &p.Email, pq.Array(&p.Invalid))
 		if err != nil {
 			return matching.Group{}, err
 		}
 		group.People = append(group.People, p)
-		fmt.Println(p.Name)
 	}
 
 	return group, nil
+}
+
+// GetMatched gets the information needed to email the participants who they've been matched with
+func (db *DB) GetMatched() ([]email.Match, error) {
+	qry := `SELECT name, email, reciever FROM people INNER JOIN matches on people.name = matches.giver`
+	rows, err := db.Query(qry)
+	if err != nil {
+		return []email.Match{}, err
+	}
+
+	defer rows.Close()
+	matched := []email.Match{}
+	for rows.Next() {
+		var m email.Match
+		err = rows.Scan(&m.Name, &m.Email, &m.Reciever)
+		if err != nil {
+			return []email.Match{}, err
+		}
+
+		matched = append(matched, m)
+	}
+
+	return matched, nil
 }
 
 // SaveMatches does a bulk import to save all the matches into the database
@@ -163,10 +179,10 @@ func (db *DB) SaveMatches(m *matching.Matches) error {
 		return err
 	}
 
-	stmt, _ := txn.Prepare(pq.CopyIn("matches", "id", "giver", "reciever"))
+	stmt, _ := txn.Prepare(pq.CopyIn("matches", "giver", "reciever"))
 
 	for _, pair := range (*m).Pairs {
-		_, err = stmt.Exec(pair.Giver.ID, pair.Giver.Name, pair.Reciever.Name)
+		_, err = stmt.Exec(pair.Giver.Name, pair.Reciever.Name)
 		if err != nil {
 			return err
 		}
