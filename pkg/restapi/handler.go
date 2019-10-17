@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/BattleBas/go-surprise/pkg/email"
 	"github.com/BattleBas/go-surprise/pkg/matching"
 	"github.com/BattleBas/go-surprise/pkg/storage"
 	"github.com/gorilla/mux"
@@ -32,6 +33,7 @@ func Handler() http.Handler {
 	}
 
 	r := mux.NewRouter()
+	r.HandleFunc("/email", e.Email).Methods("POST")
 	r.HandleFunc("/register", e.Register).Methods("POST")
 	r.HandleFunc("/matches", e.Matches).Methods("POST")
 	return r
@@ -84,6 +86,30 @@ func (e *env) Matches(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("500 - Something went wrong saving to database!"))
 		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("200 - Matching successful"))
+}
+
+//Email will send an email to every participant listing the match they were given
+func (e *env) Email(w http.ResponseWriter, r *http.Request) {
+	m, err := e.db.GetMatched()
+	if err != nil {
+		log.Printf("%v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("500 - Something went wrong getting the matches!"))
+		return
+	}
+
+	for _, p := range m {
+		err = email.Send(p)
+		if err != nil {
+			log.Printf("%v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("500 - Something went wrong sending the emails!"))
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusOK)
