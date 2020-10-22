@@ -1,9 +1,0 @@
-.git
-.vscode
-.travis.yml
-.env
-assets/
-
-people-test.json
-README.md
-*.exe
