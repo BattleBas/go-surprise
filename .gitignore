@@ -16,3 +16,7 @@ vendor/
 bin/
 
 .serverless
+
+secrets.json
+people.json
+response.json

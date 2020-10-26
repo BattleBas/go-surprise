@@ -1,16 +1,11 @@
 service: surprise
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
 frameworkVersion: '2'
 
 provider:
   name: aws
   runtime: go1.x
   region: us-east-2
-# you can overwrite defaults here
-#  stage: dev
-
 
 package:
   exclude:
@@ -20,4 +15,15 @@ package:
 
 functions:
   matches:
-    handler: bin/surprise
+    handler: bin/surprise_matches
+    memorySize: 128
+    environment:
+      EMAIL: ${file(secrets.json):EMAIL}
+      EMAIL_PASS: ${file(secrets.json):EMAIL_PASS}
+  email:
+    handler: bin/surprise_email
+    memorySize: 128
+    timeout: 20
+    environment:
+      EMAIL: ${file(secrets.json):EMAIL}
+      EMAIL_PASS: ${file(secrets.json):EMAIL_PASS}

@@ -2,7 +2,8 @@
 
 build: gomodgen
 	export GO111MODULE=on
-	env GOOS=linux go build -ldflags="-s -w" -o bin/surprise cmd/main.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/surprise_matches cmd/matches/main.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/surprise_email cmd/email/main.go
 
 clean:
 	rm -rf ./bin ./vendor Gopkg.lock

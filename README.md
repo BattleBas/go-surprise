@@ -1,7 +1,5 @@
 # go-surprise
 
-[![Build Status](https://travis-ci.com/BattleBas/go-surprise.svg?branch=master)](https://travis-ci.com/BattleBas/go-surprise)
-
 ![alt text](assets/surprise_logo.png "logo")
 
 The goal of this project is the provide a backend application that will help
@@ -25,5 +23,9 @@ To build `go-surprise` you need:
 
 ## Getting started
 
+There are two lambdas, one that will generate the matches and another that will email the particpants their match.
+
 1. Setup aws cli with `aws configure`
 2. Deploy lambda with `make deploy`
+3. `aws lambda invoke --function-name surprise-dev-matches --payload fileb://people-test.json response.json`
+4. `aws lambda invoke --function-name surprise-dev-email --payload fileb://response.json response.json`

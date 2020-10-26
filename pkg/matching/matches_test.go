@@ -18,14 +18,14 @@ func TestCreateMatches(t *testing.T) {
 		{"no-valid-pairs",
 			Group{
 				[]Person{
-					Person{Name: "Bob"},
-					Person{Name: "Bob"},
+					{Name: "Bob"},
+					{Name: "Bob"},
 				},
 			},
 			Group{
 				[]Person{
-					Person{Name: "Bob"},
-					Person{Name: "Bob"},
+					{Name: "Bob"},
+					{Name: "Bob"},
 				},
 			},
 			Matches{},
@@ -34,23 +34,23 @@ func TestCreateMatches(t *testing.T) {
 		{"valid-pairs",
 			Group{
 				[]Person{
-					Person{Name: "Bob"},
-					Person{Name: "Eric"},
+					{Name: "Bob"},
+					{Name: "Eric"},
 				},
 			},
 			Group{
 				[]Person{
-					Person{Name: "Bob"},
-					Person{Name: "Eric"},
+					{Name: "Bob"},
+					{Name: "Eric"},
 				},
 			},
 			Matches{
 				[]Pair{
-					Pair{
+					{
 						Giver:    Person{Name: "Bob"},
 						Reciever: Person{Name: "Eric"},
 					},
-					Pair{
+					{
 						Giver:    Person{Name: "Eric"},
 						Reciever: Person{Name: "Bob"},
 					},
